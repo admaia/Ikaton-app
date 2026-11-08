@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light — paper, ink, terracotta */
+:root {
+  --paper: #f9f7f4;
+  --sand: #f1ece5;
+  --ink: #161918;
+  --muted: #5e625f;
+  --line: #ddd7cf;
+  --accent: #c95b30;
+  --accent-strong: #8f3d1f;
+  --accent-text: #a8481f;
+  --ok: #234b32;
+  --warn: #7a4a14;
+  --warn-bg: #f5e9d8;
+}
+
+/* Dark — charcoal + deep ink. Every text pair ≥ 4.5:1 */
+.dark {
+  --paper: #121413;
+  --sand: #1b1e1c;
+  --ink: #f2efea;
+  --muted: #b4b9b3;
+  --line: #2e322f;
+  --accent: #c95b30;
+  --accent-strong: #8f3d1f;
+  --accent-text: #e89a72;
+  --ok: #8cc39d;
+  --warn: #e6b877;
+  --warn-bg: #2a2219;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-text: var(--accent-text);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --font-serif: var(--font-dm-serif), Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+}
+
+html { background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-sans); }
+::selection { background: var(--accent); color: #fff; }
+a { color: var(--accent-text); }
+a:hover { color: var(--accent-strong); }
+
+.grain {
+  position: absolute; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+.dark .grain { mix-blend-mode: screen; opacity: .05; }
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* Desktop showcase: the bare app is hidden until the shell mounts, so no narrow strip flashes on a wide screen */
+html[data-shell='showcase'] [data-app-root] { display: none; }

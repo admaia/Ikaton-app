@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum Rhythm {
+  WEEK
+  FORTNIGHT
+  MONTH
+}
+
+enum OrderMode {
+  DRAW
+  MANUAL
+}
+
+enum CycleStatus {
+  OPEN
+  CLOSED
+  PAID_OUT
+}
+
+enum Provider {
+  WAVE
+  ORANGE
+  MOOV
+  CARD
+  CASH
+  SANDBOX
+}
+
+enum PaymentStatus {
+  INITIATED
+  PENDING
+  CONFIRMED
+  FAILED
+  EXPIRED
+  NEEDS_REVIEW
+}
+
+model User {
+  id          String       @id @db.Uuid // Supabase auth.users.id
+  phone       String       @unique
+  name        String
+  createdAt   DateTime     @default(now())
+  memberships Membership[]
+}
+
+model Circle {
+  id            String       @id @default(uuid()) @db.Uuid
+  name          String
+  amount        Int // FCFA per share
+  size          Int
+  rhythm        Rhythm       @default(MONTH)
+  orderMode     OrderMode    @default(DRAW)
+  orderCommit   String?
+  orderSeed     String?
+  orderSealedAt DateTime?
+  acceptsCash   Boolean      @default(true)
+  createdById   String       @db.Uuid
+  createdAt     DateTime     @default(now())
+  memberships   Membership[]
+  cycles        Cycle[]
+  ledger        LedgerEntry[]
+}
+
+model Membership {
+  id            String         @id @default(uuid()) @db.Uuid
+  userId        String         @db.Uuid
+  circleId      String         @db.Uuid
+  role          Role           @default(MEMBER)
+  turn          Int?
+  joinedAt      DateTime       @default(now())
+  leftAt        DateTime?
+  user          User           @relation(fields: [userId], references: [id])
+  circle        Circle         @relation(fields: [circleId], references: [id])
+  payments      Payment[]
+  contributions Contribution[]
+
+  @@unique([userId, circleId])
+  @@unique([circleId, turn])
+}
+
+model Cycle {
+  id            String         @id @default(uuid()) @db.Uuid
+  circleId      String         @db.Uuid
+  index         Int
+  dueAt         DateTime
+  status        CycleStatus    @default(OPEN)
+  beneficiaryId String         @db.Uuid // Membership.id
+  closedAt      DateTime?
+  circle        Circle         @relation(fields: [circleId], references: [id])
+  payments      Payment[]
+  contributions Contribution[]
+
+  @@unique([circleId, index])
+}
+
+model Payment {
+  id             String        @id @default(uuid()) @db.Uuid
+  idempotencyKey String        @unique
+  membershipId   String        @db.Uuid
+  cycleId        String        @db.Uuid
+  provider       Provider
+  providerRef    String?
+  checkoutUrl    String?
+  notifTokenHash String?
+  amount         Int
+  currency       String        @default("XOF")
+  status         PaymentStatus @default(INITIATED)
+  failureReason  String?
+  expiresAt      DateTime
+  confirmedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  membership     Membership    @relation(fields: [membershipId], references: [id])
+  cycle          Cycle         @relation(fields: [cycleId], references: [id])
+  contribution   Contribution?
+
+  @@unique([provider, providerRef])
+  @@index([status, expiresAt])
+  @@index([membershipId, cycleId])
+}
+
+model Contribution {
+  id            String     @id @default(uuid()) @db.Uuid
+  membershipId  String     @db.Uuid
+  cycleId       String     @db.Uuid
+  paymentId     String?    @unique @db.Uuid
+  amount        Int
+  method        Provider
+  validatedById String?    @db.Uuid
+  createdAt     DateTime   @default(now())
+  membership    Membership @relation(fields: [membershipId], references: [id])
+  cycle         Cycle      @relation(fields: [cycleId], references: [id])
+  payment       Payment?   @relation(fields: [paymentId], references: [id])
+
+  @@unique([membershipId, cycleId])
+}
+
+model WebhookEvent {
+  id          String    @id @default(uuid()) @db.Uuid
+  provider    Provider
+  eventId     String
+  signatureOk Boolean
+  payload     Json
+  receivedAt  DateTime  @default(now())
+  processedAt DateTime?
+  result      String?
+
+  @@unique([provider, eventId])
+}
+
+model LedgerEntry {
+  id        String   @id @default(uuid()) @db.Uuid
+  circleId  String   @db.Uuid
+  cycleId   String?  @db.Uuid
+  kind      String // in | out | late | note | open | close
+  text      String
+  meta      String?
+  amount    Int?
+  createdAt DateTime @default(now())
+  circle    Circle   @relation(fields: [circleId], references: [id])
+
+  @@index([circleId, createdAt])
+}
+
+model SandboxTxn {
+  paymentId String   @id @db.Uuid
+  status    String // pending | succeeded | failed
+  amount    Int
+  createdAt DateTime @default(now())
+}
