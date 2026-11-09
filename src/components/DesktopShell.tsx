@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion } from 'motion/react';
-import { showcase } from '@/config/showcase';
+import { showcase, type Lang } from '@/config/showcase';
 
 export function DesktopShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -36,6 +36,18 @@ function Showcase() {
   const frame = useRef<HTMLIFrameElement>(null);
   const [src] = useState(() => (location.pathname === '/' ? '/onboarding' : location.pathname + location.search));
   const [dark, setDark] = useState(false);
+  const [lang, setLang] = useState<Lang>(() => {
+    try {
+      return localStorage.getItem('ikaton-lang') === 'fr' ? 'fr' : 'en';
+    } catch {
+      return 'en';
+    }
+  });
+  const t = showcase[lang];
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   useEffect(() => {
     setDark(document.documentElement.classList.contains('dark'));
@@ -54,6 +66,14 @@ function Showcase() {
     setDark(next);
   };
 
+  const switchLang = () => {
+    const next = lang === 'en' ? 'fr' : 'en';
+    try {
+      localStorage.setItem('ikaton-lang', next);
+    } catch {}
+    setLang(next);
+  };
+
   return (
     <div className="relative grid min-h-dvh grid-cols-[minmax(0,1fr)_auto] items-center gap-16 overflow-hidden bg-sand px-[max(48px,6vw)] py-12">
       <div className="grain" />
@@ -65,15 +85,15 @@ function Showcase() {
       >
         <img src="/assets/ikaton-logo-mark.png" alt="" className="h-9 w-auto self-start dark:invert" />
         <div className="flex flex-col gap-4">
-          <p className="m-0 text-[10px] font-bold uppercase tracking-[.3em] text-accent-text">{showcase.role} · {showcase.author}</p>
+          <p className="m-0 text-[10px] font-bold uppercase tracking-[.3em] text-accent-text">{t.role} · {t.author}</p>
           <h1 className="m-0 font-serif text-[clamp(56px,6vw,96px)] uppercase leading-[.92] tracking-[-.03em]">
             Ikàton
           </h1>
-          <p className="m-0 max-w-[460px] text-[18px] font-semibold leading-snug">{showcase.pitch}</p>
+          <p className="m-0 max-w-[460px] text-[18px] font-semibold leading-snug">{t.pitch}</p>
         </div>
 
         <ol className="m-0 flex list-none flex-col p-0">
-          {showcase.points.map((p, i) => (
+          {t.points.map((p, i) => (
             <li key={p.title} className="grid grid-cols-[36px_minmax(0,1fr)] gap-x-3 border-t border-ink/15 py-4 last:border-b">
               <span className="font-serif text-[20px] text-accent-text">{String(i + 1).padStart(2, '0')}</span>
               <span className="flex flex-col gap-1">
@@ -84,17 +104,18 @@ function Showcase() {
           ))}
         </ol>
 
-        <p className="m-0 text-[11px] font-bold uppercase tracking-[.16em] text-muted">{showcase.stack.join(' · ')}</p>
+        <p className="m-0 text-[11px] font-bold uppercase tracking-[.16em] text-muted">{t.stack.join(' · ')}</p>
 
         <div className="flex flex-wrap items-center gap-3">
-          {showcase.links.map((l) => (
-            <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="flex min-h-11 items-center border border-ink px-4 text-[10px] font-bold uppercase tracking-[.18em] text-ink no-underline hover:bg-ink hover:text-paper">
-              {l.label}
-            </a>
-          ))}
+          <a href={t.source} target="_blank" rel="noreferrer" className="flex min-h-11 items-center border border-ink px-4 text-[10px] font-bold uppercase tracking-[.18em] text-ink no-underline hover:bg-ink hover:text-paper">
+            {t.sourceLabel}
+          </a>
           <button type="button" onClick={flip} aria-pressed={dark} className="flex min-h-11 items-center gap-2 px-2 text-[10px] font-bold uppercase tracking-[.18em]">
             <span className="block size-2.5 rounded-full border-[1.5px] border-ink bg-[linear-gradient(90deg,var(--ink)_50%,transparent_50%)]" />
-            {dark ? 'Mode clair' : 'Mode sombre'}
+            {dark ? t.light : t.dark}
+          </button>
+          <button type="button" onClick={switchLang} lang={lang === 'en' ? 'fr' : 'en'} className="flex min-h-11 items-center px-2 text-[10px] font-bold uppercase tracking-[.18em]">
+            {t.switchLang}
           </button>
         </div>
       </motion.section>
@@ -106,9 +127,9 @@ function Showcase() {
         transition={{ duration: 1.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="rounded-[56px] bg-[#0E100F] p-2.5 shadow-[0_50px_100px_-30px_rgba(22,25,24,.55),0_0_0_1px_rgba(22,25,24,.7)]" style={{ height: 'min(864px, calc(100dvh - 96px))', aspectRatio: '390 / 844' }}>
-          <iframe ref={frame} src={src} title="Ikàton — démo en direct" className="block size-full rounded-[46px] border-0 bg-paper" allow="clipboard-write" />
+          <iframe ref={frame} src={src} title={t.frameTitle} className="block size-full rounded-[46px] border-0 bg-paper" allow="clipboard-write" />
         </div>
-        <p className="m-0 mt-4 text-center text-[10px] font-bold uppercase tracking-[.2em] text-muted">L’app tourne en direct · cliquez dedans</p>
+        <p className="m-0 mt-4 text-center text-[10px] font-bold uppercase tracking-[.2em] text-muted">{t.caption}</p>
       </motion.div>
     </div>
   );
