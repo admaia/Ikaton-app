@@ -3,10 +3,10 @@
 Next.js 15 (App Router) · TypeScript · Tailwind 4 · Motion · GSAP · Lenis · Prisma · Supabase (Auth + Postgres).
 
 ```bash
-cp .env.example .env.local   # fill Supabase + provider keys
-npm i
-npm run db:push              # schema + partial unique index (prisma/sql/constraints.sql)
-SEED_ME_ID=<your auth uid> npm run db:seed
+cp .env.example .env.local   # add Supabase keys and local secrets
+# Put DATABASE_URL and DIRECT_URL in .env; Prisma CLI does not read .env.local
+npm install
+npm run db:push              # applies the schema and database constraints
 npm run dev
 npm test                     # signature + state machine tests
 ```
@@ -15,7 +15,7 @@ npm test                     # signature + state machine tests
 
 - **Desktop (≥1024px)**: project page on the left, the live app inside a phone frame on the right (same-origin iframe, so sheets and scroll behave like on a phone). The address bar follows the app. Text lives in `src/config/showcase.ts`; put your name and links there.
 - **Phone**: the app full-screen. Installable (manifest + service worker). The API is never cached: an offline app shows "Pas de réseau", never a stale balance.
-- **One-tap demo** (`DEMO_MODE=true`): anonymous Supabase session, two seeded circles (member in one, admin in the other with cash to validate). Enable *Anonymous sign-ins* in Supabase → Auth → Providers.
+- **One-tap demo** (`DEMO_MODE=true`): anonymous Supabase session; the two demo circles are created on first use (member in one, admin in the other with cash to validate). Enable *Anonymous sign-ins* in Supabase → Auth → Providers.
 - **Demo operator** (`/pay/sandbox`): the visitor plays Wave and picks *valider, refuser, ne rien faire, confirmer deux fois, fausse confirmation*. Each choice sends real signed (or forged) webhooks through the same pipeline as Wave, and the page shows what the server answered. Timeout is 2 min in demo mode.
 - Clean up old anonymous users periodically (Supabase dashboard or a cron).
 
