@@ -9,7 +9,7 @@ everyone pays in, everyone gets their turn, and every franc is counted exactly o
 
 [**Live demo**](https://YOUR-DEPLOYMENT-URL) · [Case study](https://YOUR-CASE-STUDY-URL) · [Engineering notes](docs/ENGINEERING_NOTES.md)
 
-![CI](https://github.com/YOUR-GITHUB/ikaton/actions/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/admaia/Ikaton-app/actions/workflows/ci.yml/badge.svg)](https://github.com/admaia/Ikaton-app/actions/workflows/ci.yml)
 
 </div>
 
@@ -129,7 +129,7 @@ Not built yet: creating a circle, joining by invitation code, the full ledger, p
 ## Author
 
 **Adama Aïssa Maïga** · Front-end developer & design engineer · Bamako, Mali
-[GitHub](https://github.com/YOUR-GITHUB) · [LinkedIn](https://linkedin.com/in/YOUR-LINKEDIN)
+[GitHub](https://github.com/admaia) · [LinkedIn](https://linkedin.com/in/YOUR-LINKEDIN)
 
 ## License
 
