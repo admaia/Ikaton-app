@@ -97,11 +97,11 @@ tests              state machine, signatures, settle-once rules, webhook route
 ## Run it locally
 
 ```bash
-cp .env.example .env.local     # fill in Supabase, provider keys and a random SANDBOX_WEBHOOK_SECRET
+cp .env.example .env.local     # Supabase keys, secrets, DEMO_MODE=true
+                               # put DATABASE_URL and DIRECT_URL in .env (the Prisma CLI only reads .env)
 npm install
 npm run db:push                # schema + database constraints (prisma/sql/constraints.sql)
-SEED_ME_ID=<your Supabase user id> npm run db:seed
-npm run dev
+npm run dev                    # then "Essayer la démo" creates the demo circles for you
 ```
 
 ```bash
