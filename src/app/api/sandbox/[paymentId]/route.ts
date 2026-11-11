@@ -38,31 +38,31 @@ export async function POST(req: Request, { params }: { params: Promise<{ payment
     case 'approve': {
       await setTxn('succeeded');
       const e = event();
-      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e)))), label: 'Confirmation signée' });
+      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e)))), label: 'signed' });
       break;
     }
     case 'double': {
       await setTxn('succeeded');
       const e = event();
       const sig = signSandbox(JSON.stringify(e));
-      log.push({ ...(await deliver(e, sig)), label: 'Confirmation n°1' });
-      log.push({ ...(await deliver(e, sig)), label: 'Même message, renvoyé' });
+      log.push({ ...(await deliver(e, sig)), label: 'first' });
+      log.push({ ...(await deliver(e, sig)), label: 'resent' });
       const e2 = event();
-      log.push({ ...(await deliver(e2, signSandbox(JSON.stringify(e2)))), label: 'Nouveau message, même paiement' });
+      log.push({ ...(await deliver(e2, signSandbox(JSON.stringify(e2)))), label: 'again' });
       break;
     }
     case 'decline': {
       await setTxn('failed');
       const e = event();
-      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e)))), label: 'Refus signé' });
+      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e)))), label: 'declined' });
       break;
     }
     case 'forge': {
       const e = event();
-      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e), 'guessed-secret'))), label: 'Fausse signature' });
-      log.push({ ...(await deliver(e, '')), label: 'Sans signature' });
+      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e), 'guessed-secret'))), label: 'forged' });
+      log.push({ ...(await deliver(e, '')), label: 'unsigned' });
       const old = Math.floor(Date.now() / 1000) - 3600;
-      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e), env.SANDBOX_WEBHOOK_SECRET, old))), label: 'Vraie signature volée, rejouée 1 h plus tard' });
+      log.push({ ...(await deliver(e, signSandbox(JSON.stringify(e), env.SANDBOX_WEBHOOK_SECRET, old))), label: 'replayed' });
       break;
     }
     case 'silent':

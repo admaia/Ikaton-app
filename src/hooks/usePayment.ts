@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { isLive, type PublicPayment } from '@/lib/payments/status';
 
 export type Method = 'WAVE' | 'ORANGE' | 'CASH' | 'SANDBOX';
+export type OperatorAction = 'approve' | 'decline' | 'silent' | 'double' | 'forge';
+export type OperatorLine = { label: string; http: number; answer: string };
 
 // One idempotency key per attempt, so double taps and retries hit the same payment.
 export function usePayment(cycleId: string) {
@@ -57,8 +59,24 @@ export function usePayment(cycleId: string) {
     try { await fn(); } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
   };
 
+  const operate = async (action: OperatorAction) => {
+    if (!payment) return [];
+    setBusy(true);
+    try {
+      const res = await fetch(`/api/sandbox/${payment.id}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action }) });
+      const { log } = (await res.json()) as { log: OperatorLine[] };
+      await load(undefined, `/api/payments/${payment.id}`);
+      return log ?? [];
+    } catch {
+      setError('network');
+      return [];
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return {
-    payment, error, busy, start,
+    payment, error, busy, start, operate,
     check: wrap(() => load({ method: 'POST' })),
     cancel: wrap(() => load({ method: 'DELETE' })),
     retry: () => { key.current = null; setPayment(null); setError(null); },

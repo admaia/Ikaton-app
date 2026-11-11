@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { fcfa } from '@/lib/money';
-import { usePayment, type Method } from '@/hooks/usePayment';
+import { usePayment, type Method, type OperatorAction, type OperatorLine } from '@/hooks/usePayment';
 import { PaymentStatusPanel } from './PaymentStatusPanel';
 import { ArrowRight, Close } from './ui/Kit';
 import { useT } from '@/i18n/client';
@@ -13,7 +13,7 @@ const DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 export function PaySheet({ cycleId, amount, acceptsCash, ctx, onClose }: { cycleId: string; amount: number; acceptsCash: boolean; ctx: PayContext; onClose: () => void }) {
   const t = useT();
   const tp = t.pay;
-  const { payment, error, busy, start, check, cancel, retry } = usePayment(cycleId);
+  const { payment, error, busy, start, operate, check, cancel, retry } = usePayment(cycleId);
   const cashBy = ctx.admin ? tp.cashBy(ctx.admin) : tp.cashSelf;
   const methods: { id: Method; label: string; meta: string }[] = [
     ...(DEMO
@@ -26,6 +26,9 @@ export function PaySheet({ cycleId, amount, acceptsCash, ctx, onClose }: { cycle
   ];
   const [method, setMethod] = useState<Method>(methods[0].id);
   const [recap, setRecap] = useState(false);
+  const [log, setLog] = useState<OperatorLine[] | null>(null);
+  const [held, setHeld] = useState(false);
+  const [more, setMore] = useState(false);
   const chosen = methods.find((m) => m.id === method)!;
 
   useEffect(() => {
@@ -40,8 +43,86 @@ export function PaySheet({ cycleId, amount, acceptsCash, ctx, onClose }: { cycle
     </button>
   );
 
+  const live = payment?.status === 'PENDING' || payment?.status === 'INITIATED';
+  const act = async (action: OperatorAction) => {
+    const lines = await operate(action);
+    setLog(action === 'approve' ? null : lines);
+    setHeld(action !== 'approve');
+  };
+  const again = () => { retry(); setRecap(false); setLog(null); setHeld(false); setMore(false); };
+
   let body: React.ReactNode;
-  if (payment?.status === 'CONFIRMED') {
+  if (payment?.provider === 'SANDBOX' && (live || held)) {
+    const op = t.operator;
+    body = (
+      <>
+        <div className="bg-night px-[22px] pb-[22px] pt-[26px] text-on-night">
+          <div className="flex items-center justify-between gap-3">
+            <p className="m-0 text-[9.5px] font-bold uppercase tracking-[.26em] text-accent-soft">{op.eyebrow}</p>
+            {closeBtn(true)}
+          </div>
+          <h2 className="m-0 mt-4 font-serif text-[32px] font-normal leading-none">{op.title}</h2>
+          <p className="m-0 mt-3 text-[13px] font-medium leading-normal text-on-night-muted">{op.intro}</p>
+        </div>
+        <div className="px-[22px] pb-[30px] pt-6">
+          {log && (
+            <section aria-live="polite" className="a-up-sm mb-6">
+              <p className="m-0 text-[9.5px] font-bold uppercase tracking-[.26em]">{op.replied}</p>
+              {log.length === 0 ? (
+                <p className="m-0 mt-3 border-t-[1.5px] border-ink pt-3 text-[13px] font-medium leading-normal text-muted">{op.silence}</p>
+              ) : (
+                <ol className="m-0 mt-3 list-none border-t-[1.5px] border-ink p-0">
+                  {log.map((l, i) => (
+                    <li key={i} className="border-b border-dotted border-line-strong py-3">
+                      <span className="block text-[9.5px] font-bold uppercase tracking-[.14em] text-muted">{op.label[l.label] ?? l.label} · HTTP {l.http}</span>
+                      <span className="mt-1 block text-[13.5px] font-semibold">{op.answer[l.answer] ?? l.answer}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
+              {live && <p className="m-0 mt-3 text-[12.5px] font-medium text-muted">{op.still}</p>}
+            </section>
+          )}
+
+          {live ? (
+            <button type="button" disabled={busy} onClick={() => act('approve')} className="flex min-h-[58px] w-full items-center justify-between bg-accent px-[22px] text-[11px] font-bold uppercase tracking-[.2em] text-white transition-colors hover:bg-accent-strong disabled:opacity-50">
+              {busy ? tp.wait : op.approve} <ArrowRight />
+            </button>
+          ) : (
+            <button type="button" onClick={() => setHeld(false)} className="flex min-h-[58px] w-full items-center justify-between bg-ink px-[22px] text-[11px] font-bold uppercase tracking-[.2em] text-paper transition-colors hover:bg-accent hover:text-white">
+              {op.result} <ArrowRight />
+            </button>
+          )}
+
+          {live && (
+            <>
+              <button type="button" aria-expanded={more} onClick={() => setMore((v) => !v)} className="mt-3 flex min-h-12 w-full items-center justify-between text-[10px] font-bold uppercase tracking-[.18em] text-ink">
+                {more ? op.less : op.more}
+                <span aria-hidden className={`transition-transform ${more ? 'rotate-180' : ''}`}>↓</span>
+              </button>
+              {more && (
+                <div className="a-up-sm">
+                  <p className="m-0 mb-2 text-[12.5px] font-medium leading-normal text-muted">{op.moreNote}</p>
+                  {op.actions.map((a) => (
+                    <button
+                      key={a.id}
+                      type="button"
+                      disabled={busy}
+                      onClick={() => act(a.id as OperatorAction)}
+                      className="flex min-h-16 w-full flex-col items-start gap-1 border-t border-line-strong py-3.5 text-left transition-colors last:border-b hover:text-accent-text disabled:opacity-50"
+                    >
+                      <span className="font-serif text-[19px] leading-[1.1]">{a.label}</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-[.14em] text-muted">{a.meta}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </>
+    );
+  } else if (payment?.status === 'CONFIRMED') {
     body = <PaymentStatusPanel p={payment} busy={busy} onCheck={check} onCancel={cancel} onRetry={retry} ctx={ctx} onDone={onClose} />;
   } else if (payment) {
     body = (
@@ -50,7 +131,7 @@ export function PaySheet({ cycleId, amount, acceptsCash, ctx, onClose }: { cycle
           <p className="m-0 text-[9.5px] font-bold uppercase tracking-[.26em]">{ctx.circle} — {t.circle.cycle(ctx.cycle)}</p>
           {closeBtn(false)}
         </div>
-        <PaymentStatusPanel p={payment} busy={busy} onCheck={check} onCancel={cancel} onRetry={() => { retry(); setRecap(false); }} />
+        <PaymentStatusPanel p={payment} busy={busy} onCheck={check} onCancel={cancel} onRetry={again} />
       </div>
     );
   } else if (recap) {

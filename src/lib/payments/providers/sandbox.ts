@@ -7,7 +7,8 @@ import type { PaymentProvider } from './types';
 export const sandbox: PaymentProvider = {
   async createCheckout({ paymentId, amount }) {
     await prisma.sandboxTxn.upsert({ where: { paymentId }, update: {}, create: { paymentId, amount, status: 'pending' } });
-    return { providerRef: `sbx_${paymentId}`, checkoutUrl: `/pay/sandbox?p=${paymentId}` };
+    // The demo operator is played inside the pay sheet, so there is no page to send the member to.
+    return { providerRef: `sbx_${paymentId}`, checkoutUrl: '' };
   },
   async fetchStatus({ id }) {
     const t = await prisma.sandboxTxn.findUnique({ where: { paymentId: id } });

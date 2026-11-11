@@ -308,17 +308,26 @@ const fr = {
     restartNote: 'Vous repartez de zéro : de nouveaux cercles sont créés à la prochaine entrée.',
   },
 
-  sandbox: {
+  operator: {
     eyebrow: 'Opérateur de démonstration',
     title: 'Vous êtes l’opérateur',
-    intro: 'Dans la vraie vie, c’est Wave ou Orange Money. Ici, choisissez ce qui arrive, puis regardez comment Ikàton réagit.',
+    intro: 'Dans la vraie vie, c’est Wave ou Orange Money qui répond. Ici, c’est vous.',
+    approve: 'Valider le paiement',
+    more: 'Voir ce qui peut mal tourner',
+    less: 'Masquer les autres cas',
+    moreNote: 'Chaque cas envoie un vrai message au serveur d’Ikàton. Regardez ce qu’il en fait.',
     actions: [
-      { id: 'approve', label: 'Valider le paiement', meta: 'Le cas normal. La part est comptée.' },
       { id: 'decline', label: 'Refuser', meta: 'Solde insuffisant, code faux…' },
-      { id: 'silent', label: 'Ne rien faire', meta: 'Aucune confirmation n’arrive. Le paiement expire au bout de 2 min.' },
-      { id: 'double', label: 'Confirmer deux fois', meta: 'L’opérateur renvoie le même message. Comptée une seule fois ?' },
-      { id: 'forge', label: 'Envoyer une fausse confirmation', meta: 'Un tiers prétend que vous avez payé, sans la clé secrète.' },
+      { id: 'silent', label: 'Ne rien répondre', meta: 'Aucune confirmation. Le paiement expire au bout de 2 min.' },
+      { id: 'double', label: 'Confirmer deux fois', meta: 'Le même message arrive deux fois. Compté une seule fois ?' },
+      { id: 'forge', label: 'Fausse confirmation', meta: 'Quelqu’un prétend que vous avez payé, sans la clé secrète.' },
     ],
+    replied: 'Ce que le serveur a répondu',
+    silence: 'Aucun message envoyé. Ikàton attend, puis annulera le paiement à l’échéance.',
+    label: {
+      signed: 'Confirmation signée', first: 'Confirmation n°1', resent: 'Même message, renvoyé', again: 'Nouveau message, même paiement',
+      declined: 'Refus signé', forged: 'Fausse signature', unsigned: 'Sans signature', replayed: 'Vraie signature, rejouée 1 h plus tard',
+    } as Record<string, string>,
     answer: {
       confirmed: 'Vérifié auprès de l’opérateur → part comptée',
       duplicate: 'Déjà traité → ignoré, rien n’est compté deux fois',
@@ -327,9 +336,8 @@ const fr = {
       ignored: 'Rien à changer',
       needs_review: 'Mis de côté pour régularisation',
     } as Record<string, string>,
-    replied: 'Ce que le serveur d’Ikàton a répondu',
-    silence: 'Aucun message envoyé. Ikàton attend, puis annulera le paiement à l’échéance.',
-    back: 'Retour à Ikàton',
+    still: 'Le paiement attend toujours. Vous pouvez encore le valider.',
+    result: 'Voir le résultat',
   },
 
   ret: { eyebrow: 'Retour de l’opérateur', title: 'Nous vérifions', body: 'Votre part ne sera inscrite qu’après confirmation directe de l’opérateur.' },
@@ -645,17 +653,26 @@ const en: Dict = {
     restartNote: 'You start from scratch: new circles are created the next time you enter.',
   },
 
-  sandbox: {
+  operator: {
     eyebrow: 'Demo operator',
     title: 'You are the operator',
-    intro: 'In real life this is Wave or Orange Money. Here, you choose what happens — then watch how Ikàton reacts.',
+    intro: 'In real life, Wave or Orange Money answers. Here, you do.',
+    approve: 'Approve the payment',
+    more: 'See what can go wrong',
+    less: 'Hide the other cases',
+    moreNote: 'Each case sends a real message to Ikàton’s server. Watch what it does with it.',
     actions: [
-      { id: 'approve', label: 'Approve the payment', meta: 'The normal case. The share is counted.' },
       { id: 'decline', label: 'Decline', meta: 'Insufficient balance, wrong code…' },
-      { id: 'silent', label: 'Do nothing', meta: 'No confirmation arrives. The payment expires after 2 min.' },
-      { id: 'double', label: 'Confirm twice', meta: 'The operator sends the same message again. Counted only once?' },
-      { id: 'forge', label: 'Send a forged confirmation', meta: 'A third party claims you paid, without the secret key.' },
+      { id: 'silent', label: 'Don’t answer', meta: 'No confirmation. The payment expires after 2 min.' },
+      { id: 'double', label: 'Confirm twice', meta: 'The same message arrives twice. Counted only once?' },
+      { id: 'forge', label: 'Forged confirmation', meta: 'Someone claims you paid, without the secret key.' },
     ],
+    replied: 'What the server answered',
+    silence: 'No message sent. Ikàton waits, then cancels the payment when time runs out.',
+    label: {
+      signed: 'Signed confirmation', first: 'Confirmation #1', resent: 'Same message, sent again', again: 'New message, same payment',
+      declined: 'Signed decline', forged: 'Forged signature', unsigned: 'No signature', replayed: 'Real signature, replayed 1 h later',
+    },
     answer: {
       confirmed: 'Verified with the operator → share counted',
       duplicate: 'Already handled → ignored, nothing counted twice',
@@ -664,9 +681,8 @@ const en: Dict = {
       ignored: 'Nothing to change',
       needs_review: 'Set aside for review',
     },
-    replied: 'What Ikàton’s server answered',
-    silence: 'No message sent. Ikàton waits, then cancels the payment when time runs out.',
-    back: 'Back to Ikàton',
+    still: 'The payment is still waiting. You can still approve it.',
+    result: 'See the result',
   },
 
   ret: { eyebrow: 'Back from the operator', title: 'Checking', body: 'Your share is only recorded once the operator confirms it directly.' },
