@@ -20,7 +20,7 @@ const schema = z.object({
 // A guessable secret would let anyone forge sandbox confirmations on the public demo.
 const checked = schema.superRefine((v, ctx) => {
   if (v.DEMO_MODE && (v.SANDBOX_WEBHOOK_SECRET.length < 16 || v.SANDBOX_WEBHOOK_SECRET.startsWith('sandbox-secret') || v.SANDBOX_WEBHOOK_SECRET.startsWith('change-me'))) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['SANDBOX_WEBHOOK_SECRET'], message: 'Set a random secret of at least 16 characters when DEMO_MODE=true' });
+    ctx.addIssue({ code: 'custom', path: ['SANDBOX_WEBHOOK_SECRET'], message: 'Set a random secret of at least 16 characters when DEMO_MODE=true' });
   }
 });
 
