@@ -70,7 +70,8 @@ export default function Onboarding() {
       <div className="relative z-10 mx-[26px] mt-14">
         <p className={`a-up-sm m-0 text-[10px] font-bold uppercase tracking-[.3em] ${a.light ? 'text-[#a8481f]' : 'text-accent-soft'}`} style={delay(0.2)}>{s.n}</p>
         <h1 className={`a-clip m-0 mt-3 font-serif text-[46px] font-normal leading-[.98] tracking-[-.025em] ${fg}`} style={delay(0.3)}>
-          {s.a}<br />{s.b}<br /><em className="text-accent">{s.em}</em>
+          {s.a}<br />{s.b}
+          {s.em && <><br /><em className="text-accent">{s.em}</em></>}
         </h1>
       </div>
 

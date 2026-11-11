@@ -13,10 +13,10 @@ const sans = Manrope({ subsets: ['latin'], weight: ['400', '500', '600', '700', 
 export async function generateMetadata(): Promise<Metadata> {
   const fr = (await getLang()) === 'fr';
   return {
-    title: fr ? 'Ikàton — la tontine, tenue au propre' : 'Ikàton — the savings circle, kept straight',
+    title: fr ? 'Ikàton, la tontine en ligne' : 'Ikàton, the savings circle app',
     description: fr
-      ? 'Le cercle que vous connaissez déjà. Chacun cotise, chacun reçoit son tour — Ikàton tient le carnet.'
-      : 'The savings circle you already know. Everyone pays in, everyone gets their turn — Ikàton keeps the book.',
+      ? 'Chacun cotise, chacun reçoit son tour. Ikàton tient le carnet.'
+      : 'Everyone pays in, everyone gets their turn. Ikàton keeps the book.',
     applicationName: 'Ikàton',
     appleWebApp: { capable: true, title: 'Ikàton', statusBarStyle: 'default' },
     icons: { icon: '/icons/icon-192.png', apple: '/icons/apple-touch-icon.png' },

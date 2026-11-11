@@ -103,7 +103,7 @@ export default async function Home() {
         className="a-up-sm mt-[22px]"
         items={[
           { label: h.pot, value: <span className={value}>{cy.paid} / {c.size}</span> },
-          { label: h.yourTurn, value: <span className={value}>{c.turn ? h.cycle(c.turn) : '—'}</span> },
+          { label: h.yourTurn, value: <span className={value}>{c.turn ? h.cycle(c.turn) : ''}</span> },
           { label: h.youGet, value: <span className={value}>{fcfa(total)}</span> },
         ]}
       />
@@ -178,7 +178,7 @@ export default async function Home() {
                   <span className="min-w-0 flex-1">
                     <span className="block font-serif text-[18px] leading-[1.25]">{ledgerText(e.text, lang)}</span>
                     <span className="mt-1.5 block text-[11px] font-semibold uppercase tracking-[.1em] text-muted">
-                      {relativeDay(e.createdAt, lang)} {clock(e.createdAt)}{meta ? ` — ${meta.split(' · ')[0]}` : ''}
+                      {relativeDay(e.createdAt, lang)} {clock(e.createdAt)}{meta ? ` · ${meta.split(' · ')[0]}` : ''}
                     </span>
                   </span>
                   <span aria-hidden className={`block size-[11px] shrink-0 rounded-full ${dot}`} />

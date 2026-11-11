@@ -52,7 +52,7 @@ export default async function Tontines() {
                   <span className="min-w-0 flex-1">
                     <span className="block font-serif text-[29px] leading-none tracking-[-.02em]">{c.name}</span>
                     <span className="mt-2 block text-[11px] font-semibold uppercase tracking-[.14em] text-muted">
-                      {l.members(c.size)} — {fcfa(c.amount)} / {t.rhythm[c.rhythm]}{c.cycle ? ` — ${l.cycle(c.cycle.index)}` : ''}
+                      {l.members(c.size)} · {fcfa(c.amount)} / {t.rhythm[c.rhythm]}{c.cycle ? ` · ${l.cycle(c.cycle.index)}` : ''}
                     </span>
                   </span>
                   <span className="flex flex-col items-end gap-[5px]">

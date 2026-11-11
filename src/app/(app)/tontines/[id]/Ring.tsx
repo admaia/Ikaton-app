@@ -70,7 +70,7 @@ export function Ring({ members, paid, size, amount, beneficiaryId }: { members: 
               key={m.id}
               type="button"
               aria-pressed={sel === m.id}
-              aria-label={tc.memberLabel(m.name, m.isMe, m.turn ?? '—')}
+              aria-label={tc.memberLabel(m.name, m.isMe, m.turn ?? '')}
               onClick={() => setSel(m.id)}
               className={`a-pop absolute flex size-[46px] items-center justify-center rounded-full p-0 text-[13px] font-bold transition-[box-shadow,transform] hover:scale-105 ${look} ${sel === m.id ? 'shadow-[0_0_0_4px_rgba(249,247,244,.9)]' : ''}`}
               style={{ ...at(i), ...delay(0.7 + i * 0.07) }}
@@ -90,9 +90,9 @@ export function Ring({ members, paid, size, amount, beneficiaryId }: { members: 
         <div className="flex min-h-14 items-start justify-between gap-3.5">
           <div className="min-w-0">
             <p className="m-0 text-[9px] font-bold uppercase tracking-[.24em] text-on-night-muted">
-              {tc.turn(picked.turn ?? '—')}{picked.id === beneficiaryId ? tc.receivesNow : ''}
+              {tc.turn(picked.turn ?? '')}{picked.id === beneficiaryId ? tc.receivesNow : ''}
             </p>
-            <p className="m-0 mt-[7px] font-serif text-[26px] leading-none text-on-night">{picked.name}{picked.isMe ? ` — ${t.you}` : ''}</p>
+            <p className="m-0 mt-[7px] font-serif text-[26px] leading-none text-on-night">{picked.name}{picked.isMe ? ` (${t.you})` : ''}</p>
             <p className="m-0 mt-2 text-[11.5px] font-semibold tracking-[.1em] text-on-night-muted">
               {picked.id === beneficiaryId ? tc.whenFull(fcfa(total)) : line(picked)}
             </p>

@@ -109,7 +109,7 @@ export default async function CirclePage({ params, searchParams }: { params: Pro
       <section className="torn-b relative bg-accent px-[22px] pb-[46px] pt-6 text-[#161918]" aria-label={tc.beneficiaryAria}>
         <span className="inline-block bg-[#161918] px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-[.22em] text-on-night">{tc.beneficiary(cycle.index)}</span>
         <div className="mt-3 flex items-end justify-between gap-3.5">
-          <p className="m-0 font-serif text-[30px] leading-none">{cycle.beneficiary}{cycle.beneficiaryId === me.id ? ` — ${t.you}` : ''}</p>
+          <p className="m-0 font-serif text-[30px] leading-none">{cycle.beneficiary}{cycle.beneficiaryId === me.id ? ` (${t.you})` : ''}</p>
           <p className="m-0 font-serif text-[34px] leading-[.9] text-on-night">{fcfa(total)}</p>
         </div>
         <span className="mt-3 inline-block bg-[#161918] px-2.5 py-1.5 text-[9.5px] font-bold uppercase tracking-[.16em] text-on-night">
@@ -141,7 +141,7 @@ export default async function CirclePage({ params, searchParams }: { params: Pro
                 <li key={m.id} className="w-[134px] shrink-0 snap-start bg-forest px-[13px] pb-3.5 pt-3 text-on-night">
                   <p className="m-0 font-serif text-[24px] leading-none">{turn}</p>
                   {name}
-                  <p className="m-0 mt-1.5 text-[9px] font-bold uppercase tracking-[.16em]">{tc.inProgress}{m.isMe ? ` — ${t.you}` : ''}</p>
+                  <p className="m-0 mt-1.5 text-[9px] font-bold uppercase tracking-[.16em]">{tc.inProgress}{m.isMe ? ` · ${t.you}` : ''}</p>
                   <p className="m-0 mt-3 font-serif text-[21px]">{fcfa(total)}</p>
                 </li>
               );

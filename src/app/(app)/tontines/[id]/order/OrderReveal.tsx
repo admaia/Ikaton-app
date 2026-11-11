@@ -22,7 +22,7 @@ export function OrderReveal({ rows, you }: { rows: { id: string; turn: number; n
         <li key={r.id} data-row {...(r.isMe ? { 'data-me': '' } : {})} className="-mx-3 flex min-h-16 items-center gap-4 border-t border-line px-3 last:border-b">
           <span data-num className={`w-8 font-serif text-[24px] tabular-nums ${r.isMe ? 'text-accent-text' : ''}`}>{String(r.turn).padStart(2, '0')}</span>
           <span className={`flex size-9 items-center justify-center rounded-full text-[11px] font-bold ${r.isMe ? 'bg-accent text-white' : 'bg-sand'}`}>{initials(r.name)}</span>
-          <span className="flex-1 text-[15px] font-semibold">{r.name}{r.isMe ? ` — ${you}` : ''}</span>
+          <span className="flex-1 text-[15px] font-semibold">{r.name}{r.isMe ? ` (${you})` : ''}</span>
         </li>
       ))}
     </ol>

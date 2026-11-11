@@ -128,7 +128,7 @@ export function PaySheet({ cycleId, amount, acceptsCash, ctx, onClose }: { cycle
     body = (
       <div className="px-[22px] pb-[30px] pt-[26px]">
         <div className="mb-5 flex items-center justify-between gap-3">
-          <p className="m-0 text-[9.5px] font-bold uppercase tracking-[.26em]">{ctx.circle} — {t.circle.cycle(ctx.cycle)}</p>
+          <p className="m-0 text-[9.5px] font-bold uppercase tracking-[.26em]">{ctx.circle} · {t.circle.cycle(ctx.cycle)}</p>
           {closeBtn(false)}
         </div>
         <PaymentStatusPanel p={payment} busy={busy} onCheck={check} onCancel={cancel} onRetry={again} />
@@ -136,7 +136,7 @@ export function PaySheet({ cycleId, amount, acceptsCash, ctx, onClose }: { cycle
     );
   } else if (recap) {
     const rows: [string, string][] = [
-      [tp.rows.circle, `${ctx.circle} — ${t.circle.cycle(ctx.cycle)}`],
+      [tp.rows.circle, `${ctx.circle} · ${t.circle.cycle(ctx.cycle)}`],
       [tp.rows.beneficiary, ctx.beneficiary],
       [tp.rows.method, DEMO && method === 'SANDBOX' ? tp.demoMethod : chosen.label],
       [tp.rows.fees, '0 FCFA'],
@@ -177,7 +177,7 @@ export function PaySheet({ cycleId, amount, acceptsCash, ctx, onClose }: { cycle
       <>
         <div className="bg-night px-[22px] pb-[22px] pt-[26px] text-on-night">
           <div className="flex items-center justify-between gap-3">
-            <p className="m-0 text-[9.5px] font-bold uppercase tracking-[.26em] text-on-night-muted">{ctx.circle} — {t.circle.cycle(ctx.cycle)}</p>
+            <p className="m-0 text-[9.5px] font-bold uppercase tracking-[.26em] text-on-night-muted">{ctx.circle} · {t.circle.cycle(ctx.cycle)}</p>
             {closeBtn(true)}
           </div>
           <h2 className="m-0 mt-4 font-serif text-[32px] font-normal leading-none">{tp.title}</h2>

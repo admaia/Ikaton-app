@@ -20,7 +20,7 @@ export const showcase = {
     light: 'Light mode',
     dark: 'Dark mode',
     switchLang: 'Français',
-    frameTitle: 'Ikàton — live demo',
+    frameTitle: 'Ikàton live demo',
     caption: 'Live app · click inside',
   },
   fr: {
@@ -36,7 +36,7 @@ export const showcase = {
     light: 'Mode clair',
     dark: 'Mode sombre',
     switchLang: 'English',
-    frameTitle: 'Ikàton — démo en direct',
+    frameTitle: 'Ikàton, démo en direct',
     caption: 'L’app tourne en direct · cliquez dedans',
   },
 } satisfies Record<Lang, unknown>;
