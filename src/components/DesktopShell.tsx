@@ -103,6 +103,9 @@ function Showcase() {
         <p className="m-0 text-[11px] font-bold uppercase tracking-[.16em] text-muted">{t.stack.join(' · ')}</p>
 
         <div className="flex flex-wrap items-center gap-3">
+          <a href={t.caseStudy} target="_blank" rel="noreferrer" className="flex min-h-11 items-center bg-ink px-4 text-[10px] font-bold uppercase tracking-[.18em] text-paper no-underline hover:bg-accent">
+            {t.caseStudyLabel}
+          </a>
           <a href={t.source} target="_blank" rel="noreferrer" className="flex min-h-11 items-center border border-ink px-4 text-[10px] font-bold uppercase tracking-[.18em] text-ink no-underline hover:bg-ink hover:text-paper">
             {t.sourceLabel}
           </a>

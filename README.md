@@ -7,7 +7,7 @@
 A mobile-first web app for rotating savings circles (*tontines*) in Mali:
 everyone pays in, everyone gets their turn, and every franc is counted exactly once.
 
-[**Live demo**](https://ikaton-app-ihlt.vercel.app) · [Engineering notes](docs/ENGINEERING_NOTES.md)
+[**Live demo**](https://ikaton-app.vercel.app) · [Case study on Behance](https://www.behance.net/gallery/258370987/Ikaton-mobile-app-UXUI-case-study) · [Engineering notes](docs/ENGINEERING_NOTES.md)
 
 [![CI](https://github.com/admaia/Ikaton-app/actions/workflows/ci.yml/badge.svg)](https://github.com/admaia/Ikaton-app/actions/workflows/ci.yml)
 
@@ -129,7 +129,7 @@ Not built yet: creating a circle, joining by invitation code, leaving a circle, 
 ## Author
 
 **Adama Aïssa Maïga** · Front-end developer & design engineer · Bamako, Mali
-[GitHub](https://github.com/admaia) · [LinkedIn](https://linkedin.com/in/YOUR-LINKEDIN)
+[GitHub](https://github.com/admaia) · [Behance](https://www.behance.net/gallery/258370987/Ikaton-mobile-app-UXUI-case-study) · [LinkedIn](https://linkedin.com/in/YOUR-LINKEDIN)
 
 ## License
 

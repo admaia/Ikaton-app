@@ -3,6 +3,7 @@ export type Lang = 'en' | 'fr';
 const shared = {
   author: 'Adama Aïssa Maïga',
   source: 'https://github.com/admaia/Ikaton-app',
+  caseStudy: 'https://www.behance.net/gallery/258370987/Ikaton-mobile-app-UXUI-case-study',
   stack: ['Next.js 15', 'React 19', 'TypeScript', 'Tailwind 4', 'Motion', 'GSAP', 'Prisma', 'Supabase', 'PWA'],
 };
 
@@ -16,6 +17,7 @@ export const showcase = {
       { title: 'Roles follow the circle', body: 'Manager in one circle, regular member in another. Permissions never leave the circle they belong to.' },
       { title: 'From 3 to 40 members', body: 'The gauge switches from segments to a single bar past 12 members; search appears past 13.' },
     ],
+    caseStudyLabel: 'Case study',
     sourceLabel: 'Source code',
     light: 'Light mode',
     dark: 'Dark mode',
@@ -32,6 +34,7 @@ export const showcase = {
       { title: 'Le rôle suit le cercle', body: 'Gestionnaire dans un cercle, simple membre dans un autre. Les droits ne sortent jamais du cercle.' },
       { title: 'De 3 à 40 membres', body: 'La jauge passe de segments à une barre au-delà de 12, la recherche apparaît au-delà de 13.' },
     ],
+    caseStudyLabel: 'Étude de cas',
     sourceLabel: 'Code source',
     light: 'Mode clair',
     dark: 'Mode sombre',
