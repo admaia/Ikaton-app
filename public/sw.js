@@ -1,5 +1,5 @@
 /* Ikàton service worker — app shell offline, never caches money. */
-const VERSION = 'ikaton-v1';
+const VERSION = 'ikaton-v2';
 const SHELL = ['/offline', '/icons/icon-192.png', '/assets/ikaton-logo-mark.png', '/assets/empty-basket.png'];
 
 self.addEventListener('install', (e) => {
@@ -32,8 +32,11 @@ self.addEventListener('fetch', (e) => {
         (hit) =>
           hit ||
           fetch(req).then((res) => {
-            const copy = res.clone();
-            caches.open(VERSION).then((c) => c.put(req, copy));
+            // Only keep real files: a cached 404 would break every visit after a deploy.
+            if (res.ok) {
+              const copy = res.clone();
+              caches.open(VERSION).then((c) => c.put(req, copy));
+            }
             return res;
           }),
       ),

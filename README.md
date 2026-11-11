@@ -23,11 +23,11 @@ Today, most circles are run from a paper notebook or a WhatsApp group. That work
 
 **Ikàton** keeps the notebook for the group: who paid, who is next, and a record nobody can quietly edit.
 
-> The interface is in French because Ikàton is built for tontine groups in Mali.
+> The app is built for tontine groups in Mali, so French is a first-class language. The live demo opens in English; switch with **Français** on the showcase page or in the profile.
 
 ## Try it in one click
 
-No phone number needed. On the live demo, tap **« Essayer la démo »**:
+No phone number needed. On the live demo, tap **Try the demo**:
 
 - You land in two ready-made circles: a **member** in one (a share to pay) and the **organiser** in the other (a cash deposit to validate). Roles belong to a circle, not to a person.
 - When you pay, you play the mobile-money operator. You choose what happens and see exactly how the server reacts:

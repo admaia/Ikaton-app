@@ -1,16 +1,9 @@
 import 'server-only';
-import type { Provider, Rhythm } from '@prisma/client';
 import { prisma } from './prisma';
 
 export type ShareStatus = 'paid' | 'pending' | 'late' | 'due';
 
 const LIVE = { in: ['INITIATED', 'PENDING'] as ('INITIATED' | 'PENDING')[] };
-
-export const METHOD: Record<Provider, string> = {
-  WAVE: 'Wave', ORANGE: 'Orange M.', MOOV: 'Moov', CARD: 'Carte', CASH: 'Espèces', SANDBOX: 'Démo',
-};
-
-export const RHYTHM_LABEL: Record<Rhythm, string> = { WEEK: 'semaine', FORTNIGHT: 'quinzaine', MONTH: 'mois' };
 
 function shareStatus(paid: boolean, pending: boolean, dueAt: Date, now: Date): ShareStatus {
   if (paid) return 'paid';

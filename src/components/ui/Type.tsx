@@ -26,27 +26,3 @@ export const Title = ({ children, className = '' }: { children: ReactNode; class
     {children}
   </motion.h1>
 );
-
-export const Amount = ({ value, size = 'lg', unit = true }: { value: string; size?: 'md' | 'lg' | 'xl'; unit?: boolean }) => (
-  <span className="inline-flex items-baseline gap-1.5">
-    <span className={`font-serif tabular-nums tracking-[-.02em] ${{ md: 'text-[26px]', lg: 'text-[40px]', xl: 'text-[64px] leading-none' }[size]}`}>{value}</span>
-    {unit && <span className="text-[10px] font-bold uppercase tracking-[.2em] text-muted">FCFA</span>}
-  </span>
-);
-
-/** Status is always shape + word, never color alone. */
-export function StatusMark({ kind }: { kind: 'paid' | 'pending' | 'late' | 'due' | 'receives' }) {
-  const map = {
-    paid: { label: 'Payé', shape: <span className="block size-2.5 rounded-full bg-ink" /> },
-    pending: { label: 'En vérification', shape: <span className="block size-2.5 rounded-full border-[1.5px] border-dashed border-ink animate-spin [animation-duration:3s]" /> },
-    late: { label: 'En retard', shape: <span className="block size-2.5 rotate-45 bg-warn" /> },
-    due: { label: 'Attendu', shape: <span className="block size-2.5 rounded-full border-[1.5px] border-ink" /> },
-    receives: { label: 'Reçoit', shape: <span className="block size-2.5 bg-accent" /> },
-  }[kind];
-  return (
-    <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.18em]">
-      {map.shape}
-      {map.label}
-    </span>
-  );
-}

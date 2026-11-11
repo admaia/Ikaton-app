@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase/client';
 import { Button } from './ui/Button';
+import { useT } from '@/i18n/client';
 
 export const DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
 export function DemoButton({ variant = 'accent' }: { variant?: 'accent' | 'ink' | 'line' | 'line-night' }) {
   const router = useRouter();
+  const t = useT();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(false);
   if (!DEMO) return null;
@@ -26,8 +28,8 @@ export function DemoButton({ variant = 'accent' }: { variant?: 'accent' | 'ink' 
   };
   return (
     <div className="flex flex-col gap-2">
-      <Button variant={variant} onClick={go} disabled={busy}>{busy ? 'Préparation des cercles…' : 'Essayer la démo'}</Button>
-      {err && <p role="alert" className="m-0 text-[13px] font-semibold text-accent-soft">La démo n’a pas pu démarrer. Réessayez.</p>}
+      <Button variant={variant} onClick={go} disabled={busy}>{busy ? t.demo.busy : t.demo.start}</Button>
+      {err && <p role="alert" className="m-0 text-[13px] font-semibold text-accent-soft">{t.demo.failed}</p>}
     </div>
   );
 }

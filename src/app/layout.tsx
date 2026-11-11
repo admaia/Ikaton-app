@@ -3,19 +3,26 @@ import { DM_Serif_Display, Manrope } from 'next/font/google';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { DesktopShell } from '@/components/DesktopShell';
 import { RegisterSW } from '@/components/RegisterSW';
+import { LangProvider } from '@/i18n/client';
+import { getLang } from '@/i18n/server';
 import './globals.css';
 
 const serif = DM_Serif_Display({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-dm-serif' });
 const sans = Manrope({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-manrope' });
 
-export const metadata: Metadata = {
-  title: 'Ikàton — la tontine, tenue au propre',
-  description: 'Le cercle que vous connaissez déjà. Chacun cotise, chacun reçoit son tour — Ikàton tient le carnet.',
-  applicationName: 'Ikàton',
-  appleWebApp: { capable: true, title: 'Ikàton', statusBarStyle: 'default' },
-  icons: { icon: '/icons/icon-192.png', apple: '/icons/apple-touch-icon.png' },
-  formatDetection: { telephone: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fr = (await getLang()) === 'fr';
+  return {
+    title: fr ? 'Ikàton — la tontine, tenue au propre' : 'Ikàton — the savings circle, kept straight',
+    description: fr
+      ? 'Le cercle que vous connaissez déjà. Chacun cotise, chacun reçoit son tour — Ikàton tient le carnet.'
+      : 'The savings circle you already know. Everyone pays in, everyone gets their turn — Ikàton keeps the book.',
+    applicationName: 'Ikàton',
+    appleWebApp: { capable: true, title: 'Ikàton', statusBarStyle: 'default' },
+    icons: { icon: '/icons/icon-192.png', apple: '/icons/apple-touch-icon.png' },
+    formatDetection: { telephone: false },
+  };
+}
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#F9F7F4' },
@@ -26,16 +33,19 @@ export const viewport: Viewport = {
 // Runs before paint so the theme and the desktop showcase never flash.
 const bootScript = `try{var d=document.documentElement,t=localStorage.getItem('ikaton-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');if(t==='dark')d.classList.add('dark');if(matchMedia('(min-width: 1024px)').matches&&window.self===window.top&&!matchMedia('(display-mode: standalone)').matches)d.dataset.shell='showcase'}catch(e){}`;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = await getLang();
   return (
-    <html lang="fr" className={`${serif.variable} ${sans.variable}`} suppressHydrationWarning>
+    <html lang={lang} className={`${serif.variable} ${sans.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body className="min-h-dvh bg-paper text-ink">
         <SmoothScroll />
         <RegisterSW />
-        <DesktopShell>{children}</DesktopShell>
+        <LangProvider lang={lang}>
+          <DesktopShell>{children}</DesktopShell>
+        </LangProvider>
       </body>
     </html>
   );

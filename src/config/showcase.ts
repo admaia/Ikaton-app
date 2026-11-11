@@ -21,7 +21,7 @@ export const showcase = {
     dark: 'Dark mode',
     switchLang: 'Français',
     frameTitle: 'Ikàton — live demo',
-    caption: 'Live app, in French · click inside',
+    caption: 'Live app · click inside',
   },
   fr: {
     ...shared,

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion } from 'motion/react';
 import { showcase, type Lang } from '@/config/showcase';
+import { saveLang, useLang } from '@/i18n/client';
 
 export function DesktopShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -36,13 +37,7 @@ function Showcase() {
   const frame = useRef<HTMLIFrameElement>(null);
   const [src] = useState(() => (location.pathname === '/' ? '/onboarding' : location.pathname + location.search));
   const [dark, setDark] = useState(false);
-  const [lang, setLang] = useState<Lang>(() => {
-    try {
-      return localStorage.getItem('ikaton-lang') === 'fr' ? 'fr' : 'en';
-    } catch {
-      return 'en';
-    }
-  });
+  const [lang, setLang] = useState<Lang>(useLang());
   const t = showcase[lang];
 
   useEffect(() => {
@@ -52,7 +47,9 @@ function Showcase() {
   useEffect(() => {
     setDark(document.documentElement.classList.contains('dark'));
     const onMsg = (e: MessageEvent) => {
-      if (e.origin === location.origin && e.data?.type === 'ikaton:path') history.replaceState(null, '', e.data.path);
+      if (e.origin !== location.origin) return;
+      if (e.data?.type === 'ikaton:path') history.replaceState(null, '', e.data.path);
+      if (e.data?.type === 'ikaton:lang') setLang(e.data.lang === 'fr' ? 'fr' : 'en');
     };
     addEventListener('message', onMsg);
     return () => removeEventListener('message', onMsg);
@@ -68,10 +65,9 @@ function Showcase() {
 
   const switchLang = () => {
     const next = lang === 'en' ? 'fr' : 'en';
-    try {
-      localStorage.setItem('ikaton-lang', next);
-    } catch {}
+    saveLang(next);
     setLang(next);
+    frame.current?.contentWindow?.location.reload();
   };
 
   return (

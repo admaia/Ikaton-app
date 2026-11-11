@@ -4,6 +4,7 @@ import type { Prisma, Provider, Rhythm } from '@prisma/client';
 import { currentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { env } from '@/lib/env';
+import { getLang } from '@/i18n/server';
 
 const DAY = 864e5;
 const LABEL: Record<Provider, string> = { WAVE: 'Wave', ORANGE: 'Orange Money', MOOV: 'Moov Money', CARD: 'Carte', CASH: 'Espèces', SANDBOX: 'Démo' };
@@ -11,6 +12,7 @@ const STEP: Record<Rhythm, number> = { WEEK: 7, FORTNIGHT: 14, MONTH: 30 };
 
 type Spec = {
   name: string;
+  nameEn: string;
   amount: number;
   size: number;
   rhythm: Rhythm;
@@ -22,23 +24,24 @@ type Spec = {
 };
 
 // Recreates the four circles from the design: one to pay, one paid with a past payout, two managed.
+// Ledger lines stay in French like real ones and are translated on display.
 const SPECS: Spec[] = [
   {
-    name: 'Cercle Nafa', amount: 25000, size: 8, rhythm: 'MONTH', joinedDaysAgo: 100,
+    name: 'Cercle Nafa', nameEn: 'Nafa Circle', amount: 25000, size: 8, rhythm: 'MONTH', joinedDaysAgo: 100,
     roster: ['Aïcha K.', 'Mamadou D.', 'Fatou S.', 'Ibrahim T.', '', 'Salif C.', 'Kofi A.', 'Nadia M.'], me: 4, admin: 0,
     open: { index: 3, dueIn: 11, paid: [[0, 'WAVE', 15], [1, 'ORANGE', 12], [3, 'WAVE', 9], [7, 'MOOV', 6], [6, 'CASH', 4], [2, 'CARD', 2]], cash: [5], reminder: true },
   },
   {
-    name: 'Tontine du marché', amount: 10000, size: 12, rhythm: 'WEEK', joinedDaysAgo: 99,
+    name: 'Tontine du marché', nameEn: 'Market Tontine', amount: 10000, size: 12, rhythm: 'WEEK', joinedDaysAgo: 99,
     roster: ['Mariam K.', 'Oumou S.', 'Fatou D.', '', 'Bintou C.', 'Aïssata T.', 'Djeneba K.', 'Hawa M.', 'Ibrahim T.', 'Assitan D.', 'Kadiatou B.', 'Nana S.'], me: 3, admin: 0,
     open: { index: 9, dueIn: 2, paid: Array.from({ length: 12 }, (_, i) => [i, (['WAVE', 'ORANGE', 'MOOV', 'CASH'] as Provider[])[i % 4], 1 + (i % 3)] as [number, Provider, number]) },
   },
   {
-    name: 'Les sœurs de Badalabougou', amount: 50000, size: 6, rhythm: 'MONTH', joinedDaysAgo: 98,
+    name: 'Les sœurs de Badalabougou', nameEn: 'Badalabougou Sisters', amount: 50000, size: 6, rhythm: 'MONTH', joinedDaysAgo: 98,
     roster: ['', 'Kadi T.', 'Rama S.', 'Fanta K.', 'Sali B.'], me: 0, admin: 0,
   },
   {
-    name: 'Cercle Sènè', amount: 20000, size: 8, rhythm: 'MONTH', joinedDaysAgo: 97,
+    name: 'Cercle Sènè', nameEn: 'Sènè Circle', amount: 20000, size: 8, rhythm: 'MONTH', joinedDaysAgo: 97,
     roster: ['Rokia T.', 'Mariam D.', 'Awa S.', 'Fanta T.', 'Sira B.', '', 'Moussa K.', 'Adama K.'], me: 5, admin: 5,
     open: { index: 2, dueIn: 4, paid: [[0, 'WAVE', 20], [2, 'ORANGE', 16], [4, 'MOOV', 10], [5, 'ORANGE', 8], [6, 'WAVE', 5], [7, 'CASH', 3]], cash: [1, 3] },
   },
@@ -50,6 +53,7 @@ export async function POST() {
   if (!me) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   if (await prisma.membership.count({ where: { userId: me.id } })) return NextResponse.json({ ok: true });
 
+  const en = (await getLang()) === 'en';
   const now = Date.now();
   const at = (days: number) => new Date(now + days * DAY);
   const fr = (n: number) => n.toLocaleString('fr-FR').replace(/ | /g, ' ');
@@ -76,7 +80,7 @@ export async function POST() {
     const opened = s.open ? s.open.dueIn - s.open.index * step - 2 : -6;
 
     circles.push({
-      id: circleId, name: s.name, amount: s.amount, size: s.size, rhythm: s.rhythm, createdById: people[s.admin].userId,
+      id: circleId, name: en ? s.nameEn : s.name, amount: s.amount, size: s.size, rhythm: s.rhythm, createdById: people[s.admin].userId,
       createdAt: at(opened), orderSealedAt: sealed ? at(opened + 1) : null,
     });
     people.forEach((p, i) =>

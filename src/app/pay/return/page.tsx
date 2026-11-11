@@ -1,4 +1,5 @@
 'use client';
+import { useT } from '@/i18n/client';
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { PublicPayment } from '@/lib/payments/status';
@@ -9,6 +10,7 @@ import { Eyebrow } from '@/components/ui/Type';
 // Anyone can open this URL, so only the server-verified status is shown.
 function Return() {
   const id = useSearchParams().get('p');
+  const t = useT().ret;
   const router = useRouter();
   const [p, setP] = useState<PublicPayment | null>(null);
   const [busy, setBusy] = useState(false);
@@ -38,9 +40,9 @@ function Return() {
     <main className="flex min-h-dvh flex-col gap-8 px-6 pt-24">
       {!p ? (
         <div className="flex flex-col gap-3" role="status" aria-live="polite">
-          <Eyebrow>Retour de l’opérateur</Eyebrow>
-          <h1 className="m-0 font-serif text-[40px] uppercase leading-none">Nous vérifions</h1>
-          <p className="m-0 text-[15px] font-medium">Votre part ne sera inscrite qu’après confirmation directe de l’opérateur.</p>
+          <Eyebrow>{t.eyebrow}</Eyebrow>
+          <h1 className="m-0 font-serif text-[40px] uppercase leading-none">{t.title}</h1>
+          <p className="m-0 text-[15px] font-medium">{t.body}</p>
         </div>
       ) : (
         <PaymentStatusPanel p={p} busy={busy} onCheck={act('POST')} onCancel={act('DELETE')} onRetry={() => router.push('/home')} />

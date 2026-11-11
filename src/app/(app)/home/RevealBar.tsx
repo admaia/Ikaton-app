@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-export function RevealBar({ label, amount, href }: { label: string; amount: string; href: string }) {
+export function RevealBar({ label, amount, href, cta }: { label: string; amount: string; href: string; cta: string }) {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function RevealBar({ label, amount, href }: { label: string; amount: stri
         <span className="mt-[3px] block font-serif text-[21px] leading-none text-on-night">{amount}</span>
       </span>
       <Link href={href} tabIndex={shown ? 0 : -1} className="flex min-h-11 items-center bg-accent px-[15px] text-[9.5px] font-bold uppercase tracking-[.16em] text-white no-underline hover:bg-accent-strong">
-        Déposer
+        {cta}
       </Link>
     </div>
   );
