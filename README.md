@@ -10,6 +10,7 @@ everyone pays in, everyone gets their turn, and every franc is counted exactly o
 [**Live demo**](https://ikaton-app.vercel.app) · [Case study on Behance](https://www.behance.net/gallery/258370987/Ikaton-mobile-app-UXUI-case-study) · [Engineering notes](docs/ENGINEERING_NOTES.md)
 
 [![CI](https://github.com/admaia/Ikaton-app/actions/workflows/ci.yml/badge.svg)](https://github.com/admaia/Ikaton-app/actions/workflows/ci.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=admaia_Ikaton-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=admaia_Ikaton-app)
 
 </div>
 
@@ -84,12 +85,12 @@ More detail in [docs/ENGINEERING_NOTES.md](docs/ENGINEERING_NOTES.md).
 src/app            screens (onboarding, auth, home, circle, payment) and API routes
 src/lib/payments   state machine, signature checks, idempotent creation, settle-once, reconciliation
 src/lib            auth, data access, draw (commit–reveal), money formatting, validation
-tests              state machine, signatures, settle-once rules, webhook route
+tests              payments, webhooks, API routes, data access, translations
 ```
 
 ## Quality
 
-- **Tests** cover the logic that moves money: the payment state machine, signature and token checks, the settle-once rules (duplicates, amount mismatch, share already paid, late confirmation) and the Wave webhook route (forged, unsigned, replayed and redelivered events).
+- **Tests** cover the logic that moves money: the payment state machine, signature and token checks, the settle-once rules (duplicates, amount mismatch, share already paid, late confirmation) and the Wave webhook route (forged, unsigned, replayed and redelivered events). They also cover every API route, the data layer, the demo seed and the translations: all the code that is not a screen.
 - **CI** runs typecheck, lint and tests with coverage on every push, then a **SonarCloud** analysis.
 - **Trivy** scans dependencies, committed secrets and configuration on every push.
 - **Input validation:** every external input (request bodies, URL parameters, webhook payloads) is validated before it reaches the database.
@@ -129,7 +130,7 @@ Not built yet: creating a circle, joining by invitation code, leaving a circle, 
 ## Author
 
 **Adama Aïssa Maïga** · Front-end developer & design engineer · Bamako, Mali
-[GitHub](https://github.com/admaia) · [Behance](https://www.behance.net/gallery/258370987/Ikaton-mobile-app-UXUI-case-study) · [LinkedIn](https://linkedin.com/in/YOUR-LINKEDIN)
+[GitHub](https://github.com/admaia) · [Behance](https://www.behance.net/gallery/258370987/Ikaton-mobile-app-UXUI-case-study)
 
 ## License
 
