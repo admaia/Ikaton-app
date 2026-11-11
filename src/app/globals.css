@@ -7,14 +7,22 @@
   --paper: #f9f7f4;
   --sand: #f1ece5;
   --ink: #161918;
-  --muted: #5e625f;
+  --muted: #4a4e4b;
   --line: #ddd7cf;
+  --line-strong: #c9c1b7;
   --accent: #c95b30;
   --accent-strong: #8f3d1f;
   --accent-text: #a8481f;
   --ok: #234b32;
   --warn: #7a4a14;
   --warn-bg: #f5e9d8;
+  --night: #161918;
+  --on-night: #f9f7f4;
+  --on-night-muted: #c8cdc8;
+  --on-night-faint: #8e938f;
+  --accent-soft: #e89a72;
+  --forest: #234b32;
+  --forest-soft: #7fb894;
 }
 
 /* Dark — charcoal + deep ink. Every text pair ≥ 4.5:1 */
@@ -24,12 +32,14 @@
   --ink: #f2efea;
   --muted: #b4b9b3;
   --line: #2e322f;
+  --line-strong: #3d423e;
   --accent: #c95b30;
   --accent-strong: #8f3d1f;
   --accent-text: #e89a72;
   --ok: #8cc39d;
   --warn: #e6b877;
   --warn-bg: #2a2219;
+  --night: #0b0c0c;
 }
 
 @theme inline {
@@ -44,6 +54,14 @@
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-warn-bg: var(--warn-bg);
+  --color-line-strong: var(--line-strong);
+  --color-night: var(--night);
+  --color-on-night: var(--on-night);
+  --color-on-night-muted: var(--on-night-muted);
+  --color-on-night-faint: var(--on-night-faint);
+  --color-accent-soft: var(--accent-soft);
+  --color-forest: var(--forest);
+  --color-forest-soft: var(--forest-soft);
   --font-serif: var(--font-dm-serif), Georgia, serif;
   --font-sans: var(--font-manrope), system-ui, sans-serif;
 }
@@ -51,8 +69,10 @@
 html { background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
 body { font-family: var(--font-sans); }
 ::selection { background: var(--accent); color: #fff; }
-a { color: var(--accent-text); }
-a:hover { color: var(--accent-strong); }
+@layer base {
+  a { color: var(--accent-text); }
+  a:hover { color: var(--accent-strong); }
+}
 
 .grain {
   position: absolute; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: multiply;
@@ -60,11 +80,44 @@ a:hover { color: var(--accent-strong); }
 }
 .dark .grain { mix-blend-mode: screen; opacity: .05; }
 
+@keyframes up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes up-sm { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes clip { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes clip-r { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes rule { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes draw { from { stroke-dashoffset: 654; } }
+@keyframes pop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
+@keyframes press { from { transform: translateY(-14px) rotate(-2deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes bar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes sheet { from { transform: translateY(101%); } to { transform: none; } }
+
+.a-up { animation: up .7s var(--ease) var(--d, 0s) both; }
+.a-up-sm { animation: up-sm .7s ease var(--d, 0s) both; }
+.a-fade { animation: fade .7s ease var(--d, 0s) both; }
+.a-clip { animation: clip .9s var(--ease) var(--d, 0s) both; }
+.a-clip-r { animation: clip-r 1s var(--ease) var(--d, 0s) both; }
+.a-rule { animation: rule .8s var(--ease) var(--d, 0s) both; transform-origin: left; }
+.a-pop { animation: pop .5s var(--ease) var(--d, 0s) both; }
+.a-press { animation: press 1.3s var(--ease) var(--d, 0s) both; }
+.a-bar { animation: bar .5s var(--ease) var(--d, 0s) both; transform-origin: bottom; }
+.a-sheet { animation: sheet .5s var(--ease) both; }
+.a-marquee { animation: marquee 30s linear infinite; }
+.a-spin-slow { animation: spin-slow 90s linear infinite; }
+
+:root { --ease: cubic-bezier(.16, 1, .3, 1); }
+
+.torn-b { clip-path: polygon(0 0,100% 0,100% 90%,93% 100%,85% 91%,76% 100%,67% 92%,57% 100%,47% 91%,37% 100%,27% 92%,17% 100%,8% 91%,0 100%); }
+
+.collage-shadow { opacity: .3; filter: sepia(1) saturate(5) hue-rotate(-16deg); }
+
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
 /* Desktop showcase: the bare app is hidden until the shell mounts, so no narrow strip flashes on a wide screen */

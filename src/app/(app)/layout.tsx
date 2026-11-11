@@ -5,7 +5,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   await requireUser();
   return (
     <>
-      <div className="pb-24">{children}</div>
+      <div className="pb-28">{children}</div>
       <BottomNav />
     </>
   );

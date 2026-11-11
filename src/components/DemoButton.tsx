@@ -6,7 +6,7 @@ import { Button } from './ui/Button';
 
 export const DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
-export function DemoButton({ variant = 'accent' }: { variant?: 'accent' | 'ink' | 'line' }) {
+export function DemoButton({ variant = 'accent' }: { variant?: 'accent' | 'ink' | 'line' | 'line-night' }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(false);
@@ -27,7 +27,7 @@ export function DemoButton({ variant = 'accent' }: { variant?: 'accent' | 'ink' 
   return (
     <div className="flex flex-col gap-2">
       <Button variant={variant} onClick={go} disabled={busy}>{busy ? 'Préparation des cercles…' : 'Essayer la démo'}</Button>
-      {err && <p role="alert" className="m-0 text-[13px] font-semibold text-warn">La démo n’a pas pu démarrer. Réessayez.</p>}
+      {err && <p role="alert" className="m-0 text-[13px] font-semibold text-accent-soft">La démo n’a pas pu démarrer. Réessayez.</p>}
     </div>
   );
 }

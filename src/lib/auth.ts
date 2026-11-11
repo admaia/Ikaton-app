@@ -1,9 +1,10 @@
 import 'server-only';
+import { cache } from 'react';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 import { supabaseServer } from './supabase/server';
 
-export async function currentUser() {
+export const currentUser = cache(async () => {
   const sb = await supabaseServer();
   const { data } = await sb.auth.getUser();
   if (!data.user) return null;
@@ -13,7 +14,7 @@ export async function currentUser() {
     update: {},
     create: { id: data.user.id, phone, name: (data.user.user_metadata?.name as string) || (data.user.is_anonymous ? 'Vous' : phone) },
   });
-}
+});
 
 export async function requireUser() {
   const u = await currentUser();

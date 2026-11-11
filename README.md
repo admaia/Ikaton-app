@@ -44,7 +44,7 @@ On a computer, the app runs live inside a phone frame next to the project descri
 
 ## Screenshots
 
-Screens from the design prototype. Some of them (payout, for instance) show flows that are designed but not built yet; see the roadmap.
+Screens from the live demo.
 
 | Home | Circle | Payment | Payout |
 |---|---|---|---|
@@ -124,7 +124,7 @@ I designed Ikàton and built it with AI assistance.
 
 ## Roadmap
 
-Not built yet: creating a circle, joining by invitation code, the full ledger, payouts, leaving a circle, reminders, Moov Money and card payments. Planned for v2: end-to-end tests with Playwright, rate limiting on public endpoints, and a full Content-Security-Policy.
+Not built yet: creating a circle, joining by invitation code, leaving a circle, reminders, Moov Money and card payments. Planned for v2: end-to-end tests with Playwright, rate limiting on public endpoints, and a full Content-Security-Policy.
 
 ## Author
 

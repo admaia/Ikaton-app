@@ -12,11 +12,11 @@ const TABS = [
 export function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-[440px] border-t border-line bg-paper/95 backdrop-blur" aria-label="Navigation principale">
+    <nav className="fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-[440px] bg-night px-1.5 pb-[max(18px,env(safe-area-inset-bottom))]" aria-label="Navigation principale">
       {TABS.map((t) => {
         const on = path.startsWith(t.href);
         return (
-          <Link key={t.href} href={t.href} aria-current={on ? 'page' : undefined} className={`flex min-h-16 flex-1 flex-col items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-[.18em] no-underline ${on ? 'text-ink' : 'text-muted'}`}>
+          <Link key={t.href} href={t.href} aria-current={on ? 'page' : undefined} className={`flex min-h-[62px] flex-1 flex-col items-center justify-end gap-2 pt-3 text-[9px] font-bold uppercase tracking-[.18em] no-underline transition-colors hover:text-on-night ${on ? 'text-on-night' : 'text-on-night-faint'}`}>
             <span className={`block size-1.5 rounded-full ${on ? 'bg-accent' : 'bg-transparent'}`} />
             {t.label}
           </Link>

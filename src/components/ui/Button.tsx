@@ -7,6 +7,7 @@ const variants = {
   accent: 'bg-accent text-white hover:bg-accent-strong',
   ink: 'bg-ink text-paper hover:bg-accent hover:text-white',
   line: 'border border-ink text-ink hover:bg-ink/5',
+  'line-night': 'border border-on-night/40 text-on-night hover:bg-on-night/10',
 };
 
 export const Arrow = () => (
