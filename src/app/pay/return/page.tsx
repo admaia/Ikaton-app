@@ -19,13 +19,17 @@ function Return() {
     if (!id) return;
     let stop = false;
     const tick = async () => {
-      const res = await fetch(`/api/payments/${id}`, { method: 'POST' });
-      if (!res.ok || stop) return;
-      const data: PublicPayment = await res.json();
-      setP(data);
-      if (isLive(data.status)) setTimeout(tick, 3000);
+      try {
+        const res = await fetch(`/api/payments/${id}`, { method: 'POST' });
+        if (!res.ok || stop) return;
+        const data: PublicPayment = await res.json();
+        setP(data);
+        if (isLive(data.status)) setTimeout(() => void tick(), 3000);
+      } catch {
+        if (!stop) setTimeout(() => void tick(), 3000);
+      }
     };
-    tick();
+    void tick();
     return () => { stop = true; };
   }, [id]);
 

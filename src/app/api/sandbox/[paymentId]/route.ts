@@ -13,7 +13,7 @@ type Line = { label: string; http: number; answer: string };
 
 async function deliver(payload: object, signature: string): Promise<Line & { label: '' }> {
   const raw = JSON.stringify(payload);
-  const res = await webhook(new Request('http://internal/api/webhooks/sandbox', { method: 'POST', headers: { 'sandbox-signature': signature }, body: raw }));
+  const res = await webhook(new Request('https://internal/api/webhooks/sandbox', { method: 'POST', headers: { 'sandbox-signature': signature }, body: raw }));
   const j = await res.json();
   return { label: '', http: res.status, answer: j.error ?? (j.duplicate ? 'duplicate' : j.result) };
 }
