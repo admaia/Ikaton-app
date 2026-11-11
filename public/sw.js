@@ -1,4 +1,4 @@
-/* Ikàton service worker — app shell offline, never caches money. */
+/* The app shell works offline. Anything about money is never cached. */
 const VERSION = 'ikaton-v2';
 const SHELL = ['/offline', '/icons/icon-192.png', '/assets/ikaton-logo-mark.png', '/assets/empty-basket.png'];
 
@@ -19,13 +19,11 @@ self.addEventListener('fetch', (e) => {
   // API (payments, balances) is always live: a stale "payé" would be worse than no answer.
   if (url.pathname.startsWith('/api/')) return;
 
-  // Pages: network first, offline page if the network is gone.
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).catch(() => caches.match('/offline')));
     return;
   }
 
-  // Static assets: cache first, fill on the way.
   if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/assets/') || url.pathname.startsWith('/icons/')) {
     e.respondWith(
       caches.match(req).then(

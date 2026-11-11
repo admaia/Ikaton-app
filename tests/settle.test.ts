@@ -6,6 +6,7 @@ const db = vi.hoisted(() => ({
   payments: new Map<string, Row>(),
   contributions: [] as { membershipId: string; cycleId: string; paymentId: string }[],
   ledger: [] as unknown[],
+  conflicts: [] as string[],
 }));
 
 vi.mock('server-only', () => ({}));
@@ -46,7 +47,12 @@ vi.mock('@/lib/prisma', () => {
       },
     },
   };
-  return { prisma: { ...tx, $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx) } };
+  const $transaction = async (fn: (t: typeof tx) => unknown) => {
+    const code = db.conflicts.shift();
+    if (code) throw Object.assign(new Error(code), { code });
+    return fn(tx);
+  };
+  return { prisma: { ...tx, $transaction } };
 });
 
 import { closePayment, confirmPayment } from '@/lib/payments/settle';
@@ -61,6 +67,7 @@ beforeEach(() => {
   db.payments.clear();
   db.contributions.length = 0;
   db.ledger.length = 0;
+  db.conflicts.length = 0;
 });
 
 describe('confirmPayment', () => {
@@ -114,6 +121,37 @@ describe('confirmPayment', () => {
 
   it('reports an unknown payment', async () => {
     expect(await confirmPayment({ paymentId: 'nope', amount: 25000, currency: 'XOF' })).toBe('unknown_payment');
+  });
+
+  it('retries when two confirmations collide in the database', async () => {
+    seed();
+    db.conflicts.push('P2034', 'P2002');
+    expect(await confirmPayment({ paymentId: 'pay-1', amount: 25000, currency: 'XOF' })).toBe('confirmed');
+    expect(db.contributions).toHaveLength(1);
+  });
+
+  it('gives up after three collisions rather than looping', async () => {
+    seed();
+    db.conflicts.push('P2034', 'P2034', 'P2034');
+    await expect(confirmPayment({ paymentId: 'pay-1', amount: 25000, currency: 'XOF' })).rejects.toThrow('P2034');
+    expect(db.contributions).toHaveLength(0);
+  });
+
+  it('does not retry an error that is not a collision', async () => {
+    seed();
+    db.conflicts.push('P1001');
+    await expect(confirmPayment({ paymentId: 'pay-1', amount: 25000, currency: 'XOF' })).rejects.toThrow('P1001');
+  });
+
+  it('writes a ledger line that says how the share was verified', async () => {
+    seed();
+    seed({ id: 'pay-cash', provider: 'CASH', membershipId: 'm-2', providerRef: null });
+    await confirmPayment({ paymentId: 'pay-1', amount: 25000, currency: 'XOF' });
+    await confirmPayment({ paymentId: 'pay-cash', amount: 25000, currency: 'XOF', validatedById: 'admin-1' });
+    expect(db.ledger).toMatchObject([
+      { kind: 'in', text: 'Aminata B. a déposé sa part', meta: 'Wave · vérifié auprès de l’opérateur', amount: 25000 },
+      { kind: 'in', meta: 'Espèces · validées par le gestionnaire' },
+    ]);
   });
 });
 

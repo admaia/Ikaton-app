@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-// Commit–reveal: commit(seed) is published before the draw and the seed after, so anyone can recompute the order.
+// Commit-reveal: commit(seed) is published before the draw and the seed after, so anyone can recompute the order.
 export const commit = (seed: string) => createHash('sha256').update(seed).digest('hex');
 
 export function drawOrder<T>(items: T[], seed: string): T[] {

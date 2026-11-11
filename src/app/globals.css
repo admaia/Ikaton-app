@@ -2,7 +2,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Light — paper, ink, terracotta */
+/* Light: paper, ink, terracotta */
 :root {
   --paper: #f9f7f4;
   --sand: #f1ece5;
@@ -25,7 +25,7 @@
   --forest-soft: #7fb894;
 }
 
-/* Dark — charcoal + deep ink. Every text pair ≥ 4.5:1 */
+/* Dark: charcoal and deep ink. Every text pair is at least 4.5:1 */
 .dark {
   --paper: #121413;
   --sand: #1b1e1c;

@@ -41,6 +41,12 @@ describe('POST /api/webhooks/wave', () => {
     expect(mocks.claimEvent).toHaveBeenCalledWith('WAVE', expect.stringMatching(/^forged:/), false, body);
   });
 
+  it('rejects a body that is not JSON', async () => {
+    const res = await call('<xml/>', sign('<xml/>'));
+    expect(res.status).toBe(400);
+    expect(mocks.claimEvent).not.toHaveBeenCalled();
+  });
+
   it('rejects a request with no signature', async () => {
     const res = await call(body);
     expect(res.status).toBe(401);
