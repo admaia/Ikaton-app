@@ -11,11 +11,11 @@ export const showcase = {
   en: {
     ...shared,
     role: 'Design & development',
-    pitch: 'A tontine app for West Africa. The savings circle everyone already knows, with a ledger no one can tamper with.',
+    pitch: 'A tontine app for West Africa. The savings circle everyone already knows, with a ledger where lines are added, never edited.',
     points: [
       { title: 'Every franc counted once', body: 'Payments expire, duplicate confirmations are ignored, forged ones are rejected. Try it: the demo operator lets you test every case.' },
       { title: 'Roles follow the circle', body: 'Manager in one circle, regular member in another. Permissions never leave the circle they belong to.' },
-      { title: 'From 3 to 40 members', body: 'The gauge switches from segments to a single bar past 12 members; search appears past 13.' },
+      { title: 'From 3 to 40 members', body: 'A circle holds 3 to 40 people. Past 12 members, the gauge switches from segments to a single bar.' },
     ],
     caseStudyLabel: 'Case study',
     sourceLabel: 'Source code',
@@ -28,11 +28,11 @@ export const showcase = {
   fr: {
     ...shared,
     role: 'Design & développement',
-    pitch: 'Une app de tontine pour l’Afrique de l’Ouest. Le cercle d’épargne que tout le monde connaît, avec un carnet que personne ne peut falsifier.',
+    pitch: 'Une app de tontine pour l’Afrique de l’Ouest. Le cercle d’épargne que tout le monde connaît, avec un carnet où les lignes s’ajoutent sans jamais être modifiées.',
     points: [
       { title: 'Chaque franc compté une fois', body: 'Délais d’expiration, confirmations en double ignorées, fausses confirmations rejetées. Testez-le : l’opérateur de démo vous laisse tout essayer.' },
       { title: 'Le rôle suit le cercle', body: 'Gestionnaire dans un cercle, simple membre dans un autre. Les droits ne sortent jamais du cercle.' },
-      { title: 'De 3 à 40 membres', body: 'La jauge passe de segments à une barre au-delà de 12, la recherche apparaît au-delà de 13.' },
+      { title: 'De 3 à 40 membres', body: 'Un cercle compte de 3 à 40 personnes. Au-delà de 12, la jauge passe de segments à une seule barre.' },
     ],
     caseStudyLabel: 'Étude de cas',
     sourceLabel: 'Code source',

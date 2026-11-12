@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import type { ComponentProps, ReactNode } from 'react';
 
 const base =
@@ -24,14 +23,5 @@ export function Button({ variant = 'accent', arrow = true, children, className =
       {children}
       {arrow && <Arrow />}
     </button>
-  );
-}
-
-export function LinkButton({ variant = 'accent', arrow = true, children, className = '', ...rest }: Common & ComponentProps<typeof Link>) {
-  return (
-    <Link className={`${base} ${variants[variant]} no-underline ${className}`} {...rest}>
-      {children}
-      {arrow && <Arrow />}
-    </Link>
   );
 }

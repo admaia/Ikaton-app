@@ -12,7 +12,6 @@ const NEXT: Record<PaymentStatus, PaymentStatus[]> = {
 
 export const canTransition = (from: PaymentStatus, to: PaymentStatus) => NEXT[from].includes(to);
 export const isLive = (s: PaymentStatus) => s === 'INITIATED' || s === 'PENDING';
-export const isTerminal = (s: PaymentStatus) => !isLive(s);
 
 export type PublicPayment = {
   id: string;

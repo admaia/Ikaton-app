@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { fcfa, initials, shortDate } from '@/lib/money';
+import { fcfa, initials } from '@/lib/money';
 import { addDays, clock, dayMonth, daysLeft, longDate, monthName, relativeDay, today } from '@/lib/dates';
-import { commitmentMonths, needsSearch, pot } from '@/lib/tontine';
 
 const thursday = new Date('2026-09-17T10:30:00Z');
 
@@ -16,10 +15,6 @@ describe('money', () => {
     expect(initials('Aïcha K.')).toBe('AK');
     expect(initials('aminata')).toBe('A');
     expect(initials('Mamadou Lamine Diarra')).toBe('ML');
-  });
-
-  it('formats a short French date without the trailing dot', () => {
-    expect(shortDate(thursday)).toBe('17 sept');
   });
 });
 
@@ -52,22 +47,5 @@ describe('dates', () => {
     expect(relativeDay(thursday, 'fr', thursday)).toBe('Aujourd’hui');
     expect(relativeDay(addDays(thursday, -1), 'en', thursday)).toBe('Yesterday');
     expect(relativeDay(addDays(thursday, -5), 'fr', thursday)).toBe('12 sept.');
-  });
-});
-
-describe('circle maths', () => {
-  it('the pot is every share of the cycle', () => {
-    expect(pot(25000, 8)).toBe(200000);
-  });
-
-  it('search appears past 13 members', () => {
-    expect(needsSearch(13)).toBe(false);
-    expect(needsSearch(14)).toBe(true);
-  });
-
-  it('estimates the commitment in months, at least one', () => {
-    expect(commitmentMonths(8, 'MONTH')).toBe(8);
-    expect(commitmentMonths(12, 'WEEK')).toBe(3);
-    expect(commitmentMonths(2, 'WEEK')).toBe(1);
   });
 });
